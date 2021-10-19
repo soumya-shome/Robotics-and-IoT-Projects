@@ -1,19 +1,32 @@
 int h[7]={2,3,4,5,6,7,8};
-
+const int p = 11;
+int t=0;
 void setup() {
   for(int i=0;i<7;i++)
   {
     pinMode(h[i],OUTPUT);
   }
+  pinMode(p,INPUT);
   Serial.begin(9600);
 }
 
 void loop() {
-  for(int i=0;i<10;i++)
+  int v=digitalRead(p);
+  if(v == 0)
   {
-    num(i);
-    delay(1000);
+    if(t<=9)
+    {
+      t++;
+    }
+    else
+    {
+      t=0;
+    }
   }
+  num(t);
+  Serial.print(t+".");
+  delay(150);
+  Serial.println(v);
 }
 
 void num(int n)
