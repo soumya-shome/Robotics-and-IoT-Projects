@@ -17,8 +17,7 @@ RTC_DS1307 rtc;
 
 char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 
-byte led_red=A1;
-byte led_green=A0;
+byte led=6; //led buzzer
 
 const byte ROWS = 4;
 const byte COLS = 3;
@@ -32,31 +31,32 @@ byte rowPins[ROWS] = {2, 3, 4, A3};
 byte colPins[COLS] = {A2, A1, A0};
 Keypad myKeypad = Keypad( makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS); 
 
-Servo gate_s;
+Servo gate_s; //servo
 
-String password ="1234";
+String password ="1234"; //admin password
 String s;
 String c="";
+String card="0D 11 57 73";
 
-
+int l_mode=0; //0-servo 1-lock
 
 void setup() {
-  pinMode(led_red,OUTPUT);
-  pinMode(led_green,OUTPUT);
+  pinMode(led,OUTPUT);
+  digitalWrite(led,LOW);
   lcd.begin(20, 4);
   Serial.begin(9600);
-  gate_s.attach(8);
-  SPI.begin();      // Initiate  SPI bus
+  gate_s.attach(5);
+  SPI.begin();      // Initiat e  SPI bus
   mfrc522.PCD_Init();
   mfrc522.PCD_DumpVersionToSerial();
-  rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+  //rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
   if (! rtc.begin()) {
     Serial.println("Couldn't find RTC");
     while (1);
   }
   if (! rtc.isrunning()) {
     Serial.println("RTC is NOT running!");
-    //rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+    rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
   }
   Serial.println("Ready");
 }
@@ -74,17 +74,29 @@ void loop() {
     }
     else{
       Serial.println("En="+s);
-      check();
+      check(s);
       s="";
     }
   }
   //Serial.println();
 }
 
-void check(){
-  if(s.equals(password))
+void display(int n){
+  Display_time();
+  switch(n){
+    default:
+     lcd.setCursor(0,1);
+     lcd.print("Enter Password");
+  }
+}
+
+void check(String pass){
+  if(pass.equals(password) || pass.equals(card))
   {
     access(1);
+  }
+  else if(pass.equals("01110")){
+    l_mode=(!l_mode);      
   }
   else
   {
@@ -92,18 +104,50 @@ void check(){
   }
 }
 
-void sweep(){
-  for(int i=100;i>=0;i--)
+void access(int a){
+  lcd.setCursor(0,3);
+  switch(a)
   {
-    gate_s.write(i);
-    delay(15);
+    case 1:
+      lcd.print("   Granted     ");
+      digitalWrite(led,HIGH);
+      gate();
+      delay(500);
+    break;
+    
+    case 2:
+      lcd.print("   Denied      ");
+      delay(500);
+    break;
   }
-  delay(2000);
-  for(int i=0;i<=100;i++)
-  {
-    gate_s.write(i);
-    delay(15);
-  }
+  lcd.clear();
+  lcd.setCursor(0,0);
+}
+
+void gate(){
+  switch(l_mode){
+    case 0:
+      for(int i=100;i>=0;i--)
+      {
+        gate_s.write(i);
+        delay(15);
+      }
+      delay(2000);
+      digitalWrite(led,LOW);      
+      for(int i=0;i<=100;i++)
+      {
+        gate_s.write(i);
+        delay(15);
+      }
+    break;
+
+    case 1:
+      digitalWrite(5,HIGH);
+      delay(2000);
+      digitalWrite(led,LOW);
+      digitalWrite(5,LOW);
+    break;    
+ }
 }
 
 void rfid(){
@@ -124,43 +168,8 @@ void rfid(){
   }
   content.toUpperCase();
   Serial.println(content.substring(1)+" "); //prints the RFID Tag
-  if (content.substring(1) == "0D 11 57 73")
-  {
-    //Time();
-    //Serial.print(content.substring(1)+" ");
-    access(1);
-    delay(2000);
-    Serial.println();
-    content="";
-  }
-  else
-  {
-    access(2);
-  }
-}
-
-void access(int a){
-  lcd.setCursor(0,3);
-  switch(a)
-  {
-    case 1:
-      lcd.print("   Granted     ");
-      digitalWrite(led_green,1);
-      sweep();   
-      delay(200);
-    break;
-    
-    case 2:
-      lcd.print("   Denied      ");
-      digitalWrite(led_red,1);
-    break;
-  }
-  delay(1000);
-  lcd.clear();
-  lcd.setCursor(0,0);
-  digitalWrite(led_red,0);
-  digitalWrite(led_green,0);
- //lcd.print("Enter Password");
+  check(content.substring(1));
+  content="";
 }
 
 void Display_time(){
@@ -193,14 +202,4 @@ void Display_time(){
   //Serial.println(time);
   lcd.setCursor(0,0); 
   lcd.print(time);
-}
-
-void display(int n){
-  Display_time();
-  switch(n){
-    default:
-     lcd.setCursor(0,1);
-     lcd.print("Enter Password");
-  }
-
 }
