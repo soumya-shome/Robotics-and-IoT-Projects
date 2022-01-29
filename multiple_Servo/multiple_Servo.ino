@@ -1,4 +1,5 @@
-uconst int p1=A0;
+//Robo Arm 3.0
+const int p1=A0;
 const int p2=A1;
 const int p3=A2;
 const int but1=2;
