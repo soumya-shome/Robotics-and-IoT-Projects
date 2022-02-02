@@ -7,7 +7,7 @@ void setup() {
     pinMode(h[i],OUTPUT);
   }
   pinMode(p,INPUT);
-  Serial.begin(9600);
+  //Serial.begin(9600);  //Uncomment the Serial lines if needed
 }
 
 void loop() {
@@ -24,9 +24,9 @@ void loop() {
     }
   }
   num(t);
-  Serial.print(t+".");
+  //Serial.print(t+".");
   delay(150);
-  Serial.println(v);
+  //Serial.println(v);
 }
 
 void num(int n)
@@ -85,32 +85,32 @@ void num(int n)
 
     case 5:
       digitalWrite(2,HIGH);
-      digitalWrite(3,0);
+      digitalWrite(3,LOW);
       digitalWrite(4,HIGH);
-      digitalWrite(5,1);
-      digitalWrite(6,0);
+      digitalWrite(5,HIGH);
+      digitalWrite(6,LOW);
       digitalWrite(7,HIGH);
       digitalWrite(8,HIGH);
     break;
 
     case 6:
       digitalWrite(2,HIGH);
-      digitalWrite(3,0);
+      digitalWrite(3,LOW);
       digitalWrite(4,HIGH);
-      digitalWrite(5,1);
+      digitalWrite(5,LOW);
       digitalWrite(6,HIGH);
       digitalWrite(7,HIGH);
       digitalWrite(8,HIGH);
     break;
 
     case 7:
-      digitalWrite(2,1);
-      digitalWrite(3,1);
-      digitalWrite(4,0);
-      digitalWrite(5,0);
-      digitalWrite(6,0);
-      digitalWrite(7,1);
-      digitalWrite(8,0);
+      digitalWrite(2,HIGH);
+      digitalWrite(3,HIGH);
+      digitalWrite(4,LOW);
+      digitalWrite(5,LOW);
+      digitalWrite(6,LOW);
+      digitalWrite(7,HIGH);
+      digitalWrite(8,LOW);
     break;
 
     case 8:
@@ -132,7 +132,6 @@ void num(int n)
       digitalWrite(7,HIGH);
       digitalWrite(8,LOW);
     break;
-    
   }
 }
 
