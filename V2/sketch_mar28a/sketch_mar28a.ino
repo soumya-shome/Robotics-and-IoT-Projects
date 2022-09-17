@@ -1,4 +1,3 @@
-
 #define lc 0
 #define sc 1
 
@@ -13,13 +12,12 @@ int s1,s2,s3,s4,s5,s6,s7,s8;
 int error=0;
 int y=0;
 void setup() {
-  // put your setup code here, to run once:
-pinMode(lm1,OUTPUT);
-pinMode(lm2,OUTPUT);
-pinMode(rm1,OUTPUT);
-pinMode(rm2,OUTPUT);
-pinMode(13,OUTPUT);
-Serial.begin(9600);
+  pinMode(lm1,OUTPUT);
+  pinMode(lm2,OUTPUT);
+  pinMode(rm1,OUTPUT);
+  pinMode(rm2,OUTPUT);
+  pinMode(13,OUTPUT);
+  Serial.begin(9600);
 }
 
 void readsensors()

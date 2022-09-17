@@ -7,10 +7,10 @@
 #define rm2 10
 
 void setup() {
-pinMode(lm1,OUTPUT);
-pinMode(lm2,OUTPUT);
-pinMode(rm1,OUTPUT);
-pinMode(rm2,OUTPUT);
+  pinMode(lm1,OUTPUT);
+  pinMode(lm2,OUTPUT);
+  pinMode(rm1,OUTPUT);
+  pinMode(rm2,OUTPUT);
 }
 
 void straight()
@@ -85,7 +85,7 @@ void brake()
 }
 
 void loop() {
- // left_90();
+  // left_90();
   //delay(250);
   straight();
   delay(250);
