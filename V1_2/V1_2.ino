@@ -1,5 +1,5 @@
-
 #include <AFMotor.h>
+
 AF_DCMotor motor1(1);
 AF_DCMotor motor2(2);
 const int ir1=A0;
@@ -14,17 +14,15 @@ void setup() {
 }
 
 void loop() {
-int a=digitalRead(ir1);
-Serial.print(a);
-Serial.print(" ");
-if(a==0)
-{
- motor1.run(FORWARD);
- motor2.run(FORWARD);
-}
-else
-{
-  motor2.run(FORWARD);
-  motor1.run(RELEASE);
-}
+  int a=digitalRead(ir1);
+  Serial.print(a);
+  Serial.print(" ");
+  if(a==0) {
+    motor1.run(FORWARD);
+    motor2.run(FORWARD);
+  }
+  else {
+    motor2.run(FORWARD);
+    motor1.run(RELEASE);
+  }
 }
