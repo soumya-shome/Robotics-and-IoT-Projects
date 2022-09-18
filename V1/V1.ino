@@ -1,70 +1,103 @@
-#define irr 2
-#define irl 4
-#define rm1 5
-#define rm2 6
-#define lm1 9
-#define lm2 10 
+int mot1=9;
+int mot2=6;
+int mot3=5;
+int mot4=3;
+
+int left=13;
+int right=12;
+
+int Left=0;
+int Right=0;
+
+void LEFT ();
+void RIGHT ();
+void STOP ();
 
 void setup() {
+  pinMode(mot1,OUTPUT);
+  pinMode(mot2,OUTPUT);
+  pinMode(mot3,OUTPUT);
+  pinMode(mot4,OUTPUT);
+
+  pinMode(left,INPUT);
+  pinMode(right,INPUT);
+
+  digitalWrite(left,HIGH);
+  digitalWrite(right,HIGH);
+  
   Serial.begin(9600);
-  pinMode(irr,INPUT);
-  pinMode(irl,INPUT);
-  pinMode(rm1,OUTPUT);
-  pinMode(rm2,OUTPUT);
-  pinMode(lm1,OUTPUT);
-  pinMode(lm2,OUTPUT);
-}
-
-void straight() {
-  analogWrite(rm1,100);
-  analogWrite(rm2,0);
-  analogWrite(lm1,100);
-  analogWrite(lm2,0);
-}
-
-void Stop() {
-  analogWrite(rm1,255);
-  analogWrite(rm2,255);
-  analogWrite(lm1,255);
-  analogWrite(lm2,255);
-}
-
-void right() {
-  analogWrite(rm1,0);
-  analogWrite(rm2,0);
-  analogWrite(lm1,100);
-  analogWrite(lm2,0);
-  delay(400);
-}
-
-void left() {
-  analogWrite(rm1,100);
-  analogWrite(rm2,0);
-  analogWrite(lm1,0);
-  analogWrite(lm2,0);
-  delay(400);
 }
 
 void loop() {
-  int r1=digitalRead(irr);
-  int r2=digitalRead(irl);
-  Serial.print("irr = "+r1);
-  Serial.println("irl = "+r2);
-  if(r1==1 && r2==1) {
-    Serial.println("Straight ");
-    straight();
+  analogWrite(mot1,255);
+  analogWrite(mot2,0);
+  analogWrite(mot3,255);
+  analogWrite(mot4,0);
+
+  while(1) {
+    Left=digitalRead(left);
+    Right=digitalRead(right);
+    Serial.print(Left);
+    if((Left==0 && Right==1)==1)
+      LEFT();
+    else if((Right==0 && Left==1)==1)
+      RIGHT();
   }
-  else if(r1==0 && r2==1) {
-    Serial.println("left ");    
-    left();
+  delay(100);
+}
+
+void LEFT () {
+  analogWrite(mot3,0);
+  analogWrite(mot4,30);
+  
+  while(Left==0) {
+    Left=digitalRead(left);
+    Right=digitalRead(right);
+    if(Right==0) {
+      int lprev=Left;
+      int rprev=Right;
+      STOP();
+      while(((lprev==Left)&&(rprev==Right))==1)
+      {
+        Left=digitalRead(left);
+        Right=digitalRead(right);
+      }
+    }
+    analogWrite(mot1,255);
+    analogWrite(mot2,0); 
   }
-  else if(r1==1 && r2==0) {
-    right();
-    Serial.println("right");
+  analogWrite(mot3,255);
+  analogWrite(mot4,0);
+}
+
+void RIGHT () {
+  analogWrite(mot1,0);
+  analogWrite(mot2,30);
+
+  while(Right==0) {
+    Left=digitalRead(left);
+    Right=digitalRead(right);
+    
+    if(Left==0) {
+      int lprev=Left;
+      int rprev=Right;
+      STOP();
+      
+      while(((lprev==Left)&&(rprev==Right))==1) {
+         Left=digitalRead(left);
+         Right=digitalRead(right);
+      }
+    }
+    analogWrite(mot3,255);
+    analogWrite(mot4,0);
   }
-  else {
-    Serial.println("Stop ");
-    Stop();
-  }
-  delay(300);
+  analogWrite(mot1,255);
+  analogWrite(mot2,0);
+}
+
+void STOP () {
+  analogWrite(mot1,0);
+  analogWrite(mot2,0);
+  analogWrite(mot3,0);
+  analogWrite(mot4,0);
 }
