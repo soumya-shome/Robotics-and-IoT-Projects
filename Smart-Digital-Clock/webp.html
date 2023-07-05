@@ -1,0 +1,45 @@
+<html>
+<head>
+<script>
+  var Socket;
+  var R = 0;
+  var G = 0;
+  var B = 0;
+    function init() {
+      Socket = new WebSocket('ws://' + window.location.hostname + ':81/');
+    }
+    function hexToR(h) {return parseInt((cutHex(h)).substring(0,2),16)}
+  function hexToG(h) {return parseInt((cutHex(h)).substring(2,4),16)}
+  function hexToB(h) {return parseInt((cutHex(h)).substring(4,6),16)}
+  function cutHex(h) {return (h.charAt(0)=="#") ? h.substring(1,7):h}
+    function sendColour(){
+    var get=document.getElementById("col").value;
+      R = hexToR(get);
+      G = hexToG(get);
+      B = hexToB(get); 
+      var RGB='R'+R.toString()+'G'+G.toString()+'B'+B.toString();
+    document.getElementById("put").value=RGB;
+      send_data();
+  }
+  function resetTime(){
+	  Socket.send('{ "Mode": 2 }');
+  }
+	
+  function send_data()
+  {
+    var full_data = '{"Mode" : 1 , "R" :'+R+',"G":'+G+',"B":'+B+'}';
+    Socket.send(full_data);
+  }
+</script>
+</head>
+<body onload="javascript:init()">
+  <div>
+  <input type="color" value="#ff0000" id ="col" oninput="sendColour()"><br>
+    <input type="text" id="put">
+   </div>  
+	<div>
+		Reset Time : <input type="button" id="rese" onClick="resetTime()" value="Reset With Current Time">
+	</div>
+  
+</body>
+</html>
