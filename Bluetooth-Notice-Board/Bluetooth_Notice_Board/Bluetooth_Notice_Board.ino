@@ -5,7 +5,7 @@ LiquidCrystal_I2C lcd(0x3F,16,2);
 
 String readString;
 
-void setup() {
+void setup() {    
 lcd.init();
 lcd.backlight();
 Serial.begin(9600);
