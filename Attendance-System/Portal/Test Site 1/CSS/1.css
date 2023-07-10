@@ -1,0 +1,65 @@
+@charset "utf-8";
+/* CSS Document */
+
+.col-1 {width: 8.33%;}
+.col-2 {width: 16.66%;}
+.col-3 {width: 25%;}
+.col-4 {width: 33.33%;}
+.col-5 {width: 41.66%;}
+.col-6 {width: 50%;}
+.col-7 {width: 58.33%;}
+.col-8 {width: 66.66%;}
+.col-9 {width: 75%;}
+.col-10 {width: 83.33%;}
+.col-11 {width: 91.66%;}
+.col-12 {width: 100%;}
+
+[class*="col-"]{
+	float:left
+}
+
+.row::after
+{
+content: "";
+clear: both;
+display: table;
+}
+.p1{
+	padding:0px;
+}
+.menu-items{
+	height:30px;
+	padding-top:10px;
+	font-size:20px;
+	color: #FFF;
+	background-color:#09F;
+	text-align:center;
+	transition-duration:0.25s
+}
+
+.menu-items:hover{
+	transform:scale(1.25,1.25);
+	background-color:#06F;
+	border-radius:50px;
+}
+
+.title{
+	text-align:center;
+	font-family:"Comic Sans MS", cursive;
+	font-size:30px;
+	background:#666;
+	color:#000;
+	height:60px;
+	padding-top:30px;
+}
+
+.register{
+	border-radius:5px;
+}
+
+@media only screen and (max-width: 500px){
+[class*="col-"]{
+	width:100%;
+	padding:2px;
+}
+}
