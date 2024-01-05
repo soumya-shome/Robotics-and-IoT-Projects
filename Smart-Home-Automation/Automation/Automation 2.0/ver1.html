@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Remote</title>
+</head>
+	
+<script>
+	var connection = new WebSocket('ws://'+location.hostname+':81/');
+	var arr={pin:[0,1,2] , stat:[0,0,0]};
+	
+	function sned_data(){
+		var myJSON = JSON.stringify(arr);
+  		connection.send(myJSON);
+
+	}
+	function stat(){
+		for (i = 0;i<arr.stat.length;i++){
+			arr.stat[i]==1?document.getElementById('b'+(i+1)).innerHTML="ON":document.getElementById('b'+(i+1)).innerHTML="OFF";
+		}
+	}
+	
+	function up(a){
+		arr.stat[a]=(arr.stat[a]==1)?0:1;
+		var s=arr.stat[a]==1?"ON":"OFF";
+		console.log("LED "+(a+1)+" is "+s);
+		document.getElementById('b'+(a+1)).innerHTML=s;
+		send_data();
+	}
+	
+</script>
+<body onLoad="stat()">
+	<div align="center">
+		Button 1<br><button onclick="up(0)" id="b1"></button><br>
+		Button 2<br><button onclick="up(1)" id="b2"></button><br>
+		Button 3<br><button onclick="up(2)" id="b3"></button><br>
+	</div>
+</body>
+</html>
