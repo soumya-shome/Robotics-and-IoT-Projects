@@ -29,13 +29,23 @@ void loop(){
   if(readString.length()>0){
     Serial.println(readString);
     if(readString=="FORWARD")
+    {
       front();
+    }
     else if(readString=="BACKWARD")
+    {
       back();
+    }
     else if(readString=="LEFT")
+    {
       left();
+      Stop();
+    }
     else if(readString=="RIGHT")
+    {
       right();
+      Stop();
+    }
     else if(readString=="STOP")
       Stop();
     readString="";
@@ -47,6 +57,7 @@ void front(){
   digitalWrite(motorPin2, HIGH);
   digitalWrite(motorPin3, LOW);
   digitalWrite(motorPin4, HIGH);
+  delay(200);
 }
 
 void back(){
@@ -54,6 +65,7 @@ void back(){
   digitalWrite(motorPin1, HIGH);
   digitalWrite(motorPin4, LOW);
   digitalWrite(motorPin3, HIGH);
+  delay(200);
 }
 
 void left(){
