@@ -1,8 +1,8 @@
 #include<SoftwareSerial.h>
-int motorPin1  = 12;
-int motorPin2  = 13;
-int motorPin3  = 6;
-int motorPin4  = 5;
+int motorPin1  = 3;
+int motorPin2  = 4;
+int motorPin3  = 7;
+int motorPin4  = 8;
 
 int bluetoothTx = A1; 
 int bluetoothRx = A0;
